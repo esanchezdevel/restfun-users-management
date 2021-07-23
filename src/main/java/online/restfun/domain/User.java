@@ -48,8 +48,10 @@ public class User {
 	private List<Credential> credentials;
 	
 	@CreatedDate
+	@Column(insertable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDate created;
 	
 	@LastModifiedDate
+	@Column(insertable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	private LocalDate updated;
 }
