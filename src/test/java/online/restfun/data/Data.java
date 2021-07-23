@@ -28,4 +28,20 @@ public class Data {
 		
 		return user;
 	}
+	
+	public static Credential createMockCredential() {
+		User user = createMockUser();
+
+		Credential credential = new Credential();
+		credential.setId(1L);
+		credential.setProduct("test");
+		credential.setUser(user);
+		credential.setKey("testKey");
+		credential.setPassword("testPassword");
+		credential.setEnabled(true);
+		credential.setCreated(LocalDate.now());
+		credential.setUpdated(LocalDate.now());
+		
+		return credential;
+	}
 }
