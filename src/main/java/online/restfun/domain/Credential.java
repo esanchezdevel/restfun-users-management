@@ -1,15 +1,14 @@
 package online.restfun.domain;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -22,9 +21,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "users")
+@Table(name = "credentials")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
-public class User {
+public class Credential {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +31,15 @@ public class User {
 	
 	private String product;
 	
-	private String email;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
+	private User user;
 	
-	private Double price;
+	private String key;
 	
-	@Column(name = "price_with_vat")
-	private Double priceWithVat;
+	private String password;
 	
-	private String vat;
-	
-	@Column(name = "order_id")
-	private String orderId;
-	
-	@OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
-	private List<Credential> credentials;
+	private Boolean enabled;
 	
 	@CreatedDate
 	private LocalDate created;
