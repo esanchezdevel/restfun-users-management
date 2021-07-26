@@ -27,6 +27,7 @@ public class UserTest {
 		user.setId(1L);
 		user.setProduct("test");
 		user.setEmail("test@mail.com");
+		user.setPassword("qwertyui");
 		user.setPrice(0.01);
 		user.setPriceWithVat(0.02);
 		user.setVat("21%");
@@ -39,6 +40,7 @@ public class UserTest {
 		assertEquals(1L, user.getId());
 		assertEquals("test", user.getProduct());
 		assertEquals("test@mail.com", user.getEmail());
+		assertEquals("qwertyui", user.getPassword());
 		assertEquals(0.01, user.getPrice());
 		assertEquals(0.02, user.getPriceWithVat());
 		assertEquals("21%", user.getVat());
@@ -58,13 +60,14 @@ public class UserTest {
 
 		List<Credential> credentials = new ArrayList<>();
 
-		User user = new User(1L, "test", "test@mail.com", 0.01, 0.02, "21%", "12345", credentials, LocalDate.now(),
+		User user = new User(1L, "test", "test@mail.com", "qwertyui", 0.01, 0.02, "21%", "12345", credentials, LocalDate.now(),
 				LocalDate.now());
 
 		assertNotNull(user);
 		assertEquals(1L, user.getId());
 		assertEquals("test", user.getProduct());
 		assertEquals("test@mail.com", user.getEmail());
+		assertEquals("qwertyui", user.getPassword());
 		assertEquals(0.01, user.getPrice());
 		assertEquals(0.02, user.getPriceWithVat());
 		assertEquals("21%", user.getVat());
@@ -85,8 +88,8 @@ public class UserTest {
 		User user = Data.createMockUser();
 
 		String toString = String.format(
-				"User(id=%s, product=%s, email=%s, price=%s, priceWithVat=%s, vat=%s, orderId=%s, credentials=%s, created=%s, updated=%s)",
-				user.getId(), user.getProduct(), user.getEmail(), user.getPrice(), user.getPriceWithVat(),
+				"User(id=%s, product=%s, email=%s, password=%s, price=%s, priceWithVat=%s, vat=%s, orderId=%s, credentials=%s, created=%s, updated=%s)",
+				user.getId(), user.getProduct(), user.getEmail(), user.getPassword(), user.getPrice(), user.getPriceWithVat(),
 				user.getVat(), user.getOrderId(), user.getCredentials(), user.getCreated(), user.getUpdated());
 
 		assertEquals(toString, user.toString());

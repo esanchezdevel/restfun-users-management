@@ -34,6 +34,8 @@ public class User {
 	
 	private String email;
 	
+	private String password;
+	
 	private Double price;
 	
 	@Column(name = "price_with_vat")
