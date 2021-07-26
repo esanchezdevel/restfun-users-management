@@ -29,6 +29,45 @@ public class Data {
 		return user;
 	}
 	
+	public static User createMockUserWithCredentials() {
+		
+		List<Credential> credentials = new ArrayList<>();
+		
+		credentials.add(createMockCredential());
+		
+		User user = new User();
+		
+		user.setId(1L);
+		user.setProduct("test");
+		user.setEmail("test@mail.com");
+		user.setPrice(0.01);
+		user.setPriceWithVat(0.02);
+		user.setVat("21%");
+		user.setOrderId("12345");
+		user.setCredentials(credentials);
+		user.setCreated(LocalDate.now());
+		user.setUpdated(LocalDate.now());
+		
+		return user;
+	}
+	
+	public static User createMockUserWithoutCredentials() {
+		
+		User user = new User();
+		
+		user.setId(1L);
+		user.setProduct("test");
+		user.setEmail("test@mail.com");
+		user.setPrice(0.01);
+		user.setPriceWithVat(0.02);
+		user.setVat("21%");
+		user.setOrderId("12345");
+		user.setCreated(LocalDate.now());
+		user.setUpdated(LocalDate.now());
+		
+		return user;
+	}
+	
 	public static Credential createMockCredential() {
 		User user = createMockUser();
 

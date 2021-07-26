@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import online.restfun.domain.Credential;
-import online.restfun.exception.UsersManagementException;
 import online.restfun.service.GetCredentialsByEmailAndProductService;
 
 @RestController
@@ -28,7 +27,7 @@ public class CredentialController {
 		if (credential.isPresent()) {
 			return ResponseEntity.ok(credential.orElseThrow());
 		} else {
-			return ResponseEntity.badRequest().body(new UsersManagementException("credentials not found"));
+			return ResponseEntity.noContent().build();
 		}
 	}
 }

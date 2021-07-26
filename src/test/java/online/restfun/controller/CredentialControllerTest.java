@@ -23,11 +23,11 @@ import online.restfun.service.GetCredentialsByEmailAndProductService;
 @WebMvcTest
 public class CredentialControllerTest {
 	
-	@Autowired
-	private MockMvc mockMvc;
-	
 	@MockBean
 	private GetCredentialsByEmailAndProductService getCredentialsByEmailAndProductService;
+	
+	@Autowired
+	private MockMvc mockMvc;
 	
 	@Test
 	@DisplayName("test get by email and product")
@@ -39,10 +39,22 @@ public class CredentialControllerTest {
 		
 		when(getCredentialsByEmailAndProductService.execute(any(), any())).thenReturn(credentialOptional);
 		
-		mockMvc.perform(get("/users-management/v1/credentials?email=test%40mail.com&product=astrology"))
+		mockMvc.perform(get("/credentials?email=test%40mail.com&product=astrology"))
 		.andExpect(status().isOk())
 		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$.key").value("testKey"))
 		.andExpect(jsonPath("$.password").value("testPassword"));
+	}
+	
+	@Test
+	@DisplayName("test credential not found")
+	void testCredentialNotFound() throws Exception {
+		
+		Optional<Credential> credentialOptional = Optional.empty(); 
+		
+		when(getCredentialsByEmailAndProductService.execute(any(), any())).thenReturn(credentialOptional);
+		
+		mockMvc.perform(get("/credentials?email=test%40mail.com&product=astrology"))
+		.andExpect(status().isNoContent());
 	}
 }
