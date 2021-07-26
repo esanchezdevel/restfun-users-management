@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import online.restfun.data.Data;
 import online.restfun.domain.Credential;
+import online.restfun.domain.dto.CredentialsDTO;
+import online.restfun.mapping.CredentialsMapping;
 import online.restfun.service.GetCredentialsByEmailAndProductService;
 
 @WebMvcTest
@@ -35,7 +37,7 @@ public class CredentialControllerTest {
 		
 		Credential credential = Data.createMockCredential();
 		
-		Optional<Credential> credentialOptional = Optional.of(credential); 
+		Optional<CredentialsDTO> credentialOptional = Optional.of(CredentialsMapping.buildCredentialsDTO(credential)); 
 		
 		when(getCredentialsByEmailAndProductService.execute(any(), any())).thenReturn(credentialOptional);
 		
@@ -50,7 +52,7 @@ public class CredentialControllerTest {
 	@DisplayName("test credential not found")
 	void testCredentialNotFound() throws Exception {
 		
-		Optional<Credential> credentialOptional = Optional.empty(); 
+		Optional<CredentialsDTO> credentialOptional = Optional.empty(); 
 		
 		when(getCredentialsByEmailAndProductService.execute(any(), any())).thenReturn(credentialOptional);
 		

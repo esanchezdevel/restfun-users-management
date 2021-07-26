@@ -2,9 +2,9 @@ package online.restfun.service;
 
 import java.util.Optional;
 
-import online.restfun.domain.Credential;
+import online.restfun.domain.dto.CredentialsDTO;
 
 public interface GetCredentialsByEmailAndProductService {
 
-	Optional<Credential> execute(String email, String product);
+	Optional<CredentialsDTO> execute(String email, String product);
 }

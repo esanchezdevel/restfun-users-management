@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import online.restfun.domain.Credential;
+import online.restfun.domain.dto.CredentialsDTO;
 import online.restfun.service.GetCredentialsByEmailAndProductService;
 
 @RestController
@@ -22,7 +22,7 @@ public class CredentialController {
 	@GetMapping
 	public ResponseEntity<?> getByEmailAndProduct(@RequestParam String email, @RequestParam String product) {
 		
-		Optional<Credential> credential = getCredentialsByEmailAndProductService.execute(email, product);
+		Optional<CredentialsDTO> credential = getCredentialsByEmailAndProductService.execute(email, product);
 		
 		if (credential.isPresent()) {
 			return ResponseEntity.ok(credential.orElseThrow());

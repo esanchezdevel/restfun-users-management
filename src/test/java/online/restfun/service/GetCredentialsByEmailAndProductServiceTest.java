@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import online.restfun.data.Data;
 import online.restfun.domain.Credential;
 import online.restfun.domain.User;
+import online.restfun.domain.dto.CredentialsDTO;
 import online.restfun.repository.UserRepository;
 
 @SpringBootTest
@@ -36,7 +37,7 @@ public class GetCredentialsByEmailAndProductServiceTest {
 		
 		when(userRepository.findByEmailAndProduct(any(), any())).thenReturn(user);
 		
-		Optional<Credential> result = getCredentialsByEmailAndProductService.execute(email, product);
+		Optional<CredentialsDTO> result = getCredentialsByEmailAndProductService.execute(email, product);
 		
 		assertNotNull(result);
 		assertTrue(result.isPresent());
@@ -55,7 +56,7 @@ public class GetCredentialsByEmailAndProductServiceTest {
 		
 		when(userRepository.findByEmailAndProduct(any(), any())).thenReturn(user);
 		
-		Optional<Credential> result = getCredentialsByEmailAndProductService.execute(email, product);
+		Optional<CredentialsDTO> result = getCredentialsByEmailAndProductService.execute(email, product);
 		
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
@@ -72,7 +73,7 @@ public class GetCredentialsByEmailAndProductServiceTest {
 		
 		when(userRepository.findByEmailAndProduct(any(), any())).thenReturn(user);
 		
-		Optional<Credential> result = getCredentialsByEmailAndProductService.execute(email, product);
+		Optional<CredentialsDTO> result = getCredentialsByEmailAndProductService.execute(email, product);
 		
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
