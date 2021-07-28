@@ -17,8 +17,6 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 	
 	@Override
 	public AuthenticateResponseDTO execute(AuthenticateRequestDTO request) {
-
-		//TODO encrypt password
 		
 		Credential credential = credentialRepository.findByKeyAndPassword(request.getKey(), request.getPassword());
 		return AuthenticateMapping.buildAuthenticateResponseDTO(credential);
