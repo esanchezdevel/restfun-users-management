@@ -1,13 +1,13 @@
 package online.restfun.controller;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,47 +16,57 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import online.restfun.data.Data;
-import online.restfun.domain.Credential;
-import online.restfun.domain.dto.CredentialsDTO;
-import online.restfun.mapping.CredentialsMapping;
-import online.restfun.service.GetCredentialsByEmailAndProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import online.restfun.domain.dto.AuthenticateRequestDTO;
+import online.restfun.domain.dto.AuthenticateResponseDTO;
+import online.restfun.service.AuthenticateService;
 
 @WebMvcTest
 public class CredentialControllerTest {
 	
+	private ObjectMapper objectMapper;
+	
 	@MockBean
-	private GetCredentialsByEmailAndProductService getCredentialsByEmailAndProductService;
+	private AuthenticateService authenticateService;
 	
 	@Autowired
 	private MockMvc mockMvc;
 	
-	@Test
-	@DisplayName("test get by email and product")
-	void testGetByEmailAndProduct() throws Exception {
-		
-		Credential credential = Data.createMockCredential();
-		
-		Optional<CredentialsDTO> credentialOptional = Optional.of(CredentialsMapping.buildCredentialsDTO(credential)); 
-		
-		when(getCredentialsByEmailAndProductService.execute(any(), any())).thenReturn(credentialOptional);
-		
-		mockMvc.perform(get("/credentials?email=test%40mail.com&product=astrology"))
-		.andExpect(status().isOk())
-		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.key").value("testKey"))
-		.andExpect(jsonPath("$.password").value("testPassword"));
+	@BeforeEach
+	void setUp() {
+		objectMapper = new ObjectMapper();
 	}
 	
 	@Test
-	@DisplayName("test credential not found")
-	void testCredentialNotFound() throws Exception {
+	@DisplayName("test authenticate")
+	void testAuthenticate() throws Exception {
 		
-		Optional<CredentialsDTO> credentialOptional = Optional.empty(); 
+		AuthenticateRequestDTO authenticateRequestDTO = new AuthenticateRequestDTO("testKey", "testPassword");
+		AuthenticateResponseDTO authenticateResponseDTO = new AuthenticateResponseDTO("testProduct", true);
 		
-		when(getCredentialsByEmailAndProductService.execute(any(), any())).thenReturn(credentialOptional);
+		when(authenticateService.execute(any())).thenReturn(authenticateResponseDTO);
 		
-		mockMvc.perform(get("/credentials?email=test%40mail.com&product=astrology"))
-		.andExpect(status().isNoContent());
+		mockMvc.perform(post("/credentials/authenticate").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(authenticateRequestDTO)))
+		.andExpect(status().isOk())
+		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.product").value("testProduct"))
+		.andExpect(jsonPath("$.authenticated").value(true));
+	}
+	
+	@Test
+	@DisplayName("test authenticate unauthorized")
+	void testAuthenticateUnauthorized() throws Exception {
+		
+		AuthenticateRequestDTO authenticateRequestDTO = new AuthenticateRequestDTO("testKey", "testPassword");
+		AuthenticateResponseDTO authenticateResponseDTO = new AuthenticateResponseDTO("", false);
+		
+		when(authenticateService.execute(any())).thenReturn(authenticateResponseDTO);
+		
+		mockMvc.perform(post("/credentials/authenticate").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(authenticateRequestDTO)))
+		.andExpect(status().isUnauthorized())
+		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.product").value(""))
+		.andExpect(jsonPath("$.authenticated").value(false));
 	}
 }
