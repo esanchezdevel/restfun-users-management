@@ -54,4 +54,21 @@ public class AuthenticateServiceTest {
 		assertEquals("", authenticateResponseDTO.getProduct());
 		assertFalse(authenticateResponseDTO.isAuthenticated());
 	}
+	
+	@Test
+	@DisplayName("test encryption exception")
+	void testEncryptionException() {
+		
+		AuthenticateRequestDTO authenticateRequestDTO = new AuthenticateRequestDTO("testKey", null);
+		Credential credential = Data.createMockCredential();
+		
+		when(credentialRepository.findByKeyAndPassword(any(), any())).thenReturn(credential);
+		
+		AuthenticateResponseDTO authenticateResponseDTO = authenticateService.execute(authenticateRequestDTO);
+		
+		assertNotNull(authenticateResponseDTO);
+		assertEquals("", authenticateResponseDTO.getProduct());
+		assertFalse(authenticateResponseDTO.isAuthenticated());
+	}
+	
 }
